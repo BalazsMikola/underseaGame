@@ -15,6 +15,12 @@ namespace StrategyGame.Api
         public static void Main(string[] args)
         {
             CreateWebHostBuilder(args).Build().Run();
+
+            using ( Database db = new Database() )
+            {
+                db.city.FirstOrDefault();
+            }
+         
         }
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
