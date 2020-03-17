@@ -11,6 +11,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using StrategyGame.Dal;
+using StrategyGame.Model.DataManager;
+using StrategyGame.Model.Entities;
+using StrategyGame.Model.Repository;
 
 namespace StrategyGame.Api
 {
@@ -27,7 +30,10 @@ namespace StrategyGame.Api
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("underseaGame")));
-
+            services.AddScoped<ICityDataRepository<City>, CityManager>();
+            services.AddScoped<IBuildingDataRepository<Building>, BuildingManager>();
+            services.AddScoped<IUnitDataRepository<Unit>, UnitManager>();
+            services.AddScoped<IUpgradeDataRepository<Upgrade>, UpgradeManager>();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
 

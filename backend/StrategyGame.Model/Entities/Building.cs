@@ -8,7 +8,7 @@ namespace StrategyGame.Model.Entities
     public class Building
     {
 
-        public int Id { get; set; }
+        public int BuildingId { get; set; }
 
         public string Name { get; set; }
 
@@ -21,6 +21,7 @@ namespace StrategyGame.Model.Entities
         public int Space { get; set; }
 
         public virtual ICollection<CityBuilding> CityBuildings { get; set; }
+
 
     }
 }

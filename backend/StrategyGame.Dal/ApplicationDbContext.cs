@@ -25,15 +25,18 @@ namespace StrategyGame.Dal
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
 
+            modelBuilder.Entity<CityBuilding>()
+                .HasKey(x => new { x.CityId, x.BuildingId });
+
 
             modelBuilder.Entity<CityBuilding>()
                 .HasOne(cb => cb.City)
-                .WithMany(b => b.CityBuildings)
-                .HasForeignKey(cb => cb.Id);
+                .WithMany(c => c.CityBuildings)
+                .HasForeignKey(cb => cb.CityId);
             modelBuilder.Entity<CityBuilding>()
                 .HasOne(cb => cb.Building)
                 .WithMany(b => b.CityBuildings)
-                .HasForeignKey(cb => cb.Id);
+                .HasForeignKey(cb => cb.BuildingId);
 
 
             modelBuilder.Entity<CityUpgrade>()
@@ -64,6 +67,30 @@ namespace StrategyGame.Dal
                 .HasOne(ca => ca.Unit)
                 .WithOne(u => u.Army)
                 .HasForeignKey<CityArmy>(ca => ca.Id);
+
+            modelBuilder.Entity<Building>()
+                .HasData(
+                    new Building { BuildingId = 1, Name = "áramlásirányító", Price = 1000, Grow_pop = 50, Grow_coral = 200, Space = 0 },
+                    new Building { BuildingId = 2, Name = "zátonyvár", Price = 1000, Grow_pop = 0, Grow_coral = 0, Space = 200 }
+                );
+
+            modelBuilder.Entity<Unit>()
+               .HasData(
+                   new Unit { Id = 1, Name = "rohamfóka", Attack = 6, Defend = 2, Price = 50, Cost = 1, Food = 1 },
+                   new Unit { Id = 2, Name = "csatacsikó", Attack = 2, Defend = 6, Price = 50, Cost = 1, Food = 1 },
+                   new Unit { Id = 3, Name = "lézercápa", Attack = 5, Defend = 5, Price = 100, Cost = 3, Food = 2 }
+                );
+
+            modelBuilder.Entity<Upgrade>()
+               .HasData(
+                   new Upgrade { Id = 1, Name = "iszaptraktor", Coral = 10, Attack = 0, Defend = 0, Tax = 0 },
+                   new Upgrade { Id = 2, Name = "iszapkombájn", Coral = 15, Attack = 0, Defend = 0, Tax = 0 },
+                   new Upgrade { Id = 3, Name = "korallfal", Coral = 0, Attack = 0, Defend = 20, Tax = 0 },
+                   new Upgrade { Id = 4, Name = "szonárágyú", Coral = 0, Attack = 20, Defend = 0, Tax = 0 },
+                   new Upgrade { Id = 5, Name = "vízalatti harcművészetek", Coral = 0, Attack = 10, Defend = 10, Tax = 0 },
+                   new Upgrade { Id = 6, Name = "alkímia", Coral = 0, Attack = 0, Defend = 0, Tax = 30 }
+                );
+
         }
 
     }

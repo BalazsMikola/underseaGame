@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace StrategyGame.Dal.Migrations
 {
-    public partial class init : Migration
+    public partial class initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -11,7 +11,7 @@ namespace StrategyGame.Dal.Migrations
                 name: "Buildings",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
+                    BuildingId = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     Name = table.Column<string>(nullable: true),
                     Price = table.Column<int>(nullable: false),
@@ -21,14 +21,14 @@ namespace StrategyGame.Dal.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Buildings", x => x.Id);
+                    table.PrimaryKey("PK_Buildings", x => x.BuildingId);
                 });
 
             migrationBuilder.CreateTable(
                 name: "Cities",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
+                    CityId = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     Name = table.Column<string>(nullable: true),
                     Population = table.Column<int>(nullable: false),
@@ -38,7 +38,7 @@ namespace StrategyGame.Dal.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Cities", x => x.Id);
+                    table.PrimaryKey("PK_Cities", x => x.CityId);
                 });
 
             migrationBuilder.CreateTable(
@@ -93,24 +93,25 @@ namespace StrategyGame.Dal.Migrations
                 name: "CityBuilding",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false),
+                    CityId = table.Column<int>(nullable: false),
+                    BuildingId = table.Column<int>(nullable: false),
                     Number = table.Column<int>(nullable: false),
                     RoundToFinish = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_CityBuilding", x => x.Id);
+                    table.PrimaryKey("PK_CityBuilding", x => new { x.CityId, x.BuildingId });
                     table.ForeignKey(
-                        name: "FK_CityBuilding_Buildings_Id",
-                        column: x => x.Id,
+                        name: "FK_CityBuilding_Buildings_BuildingId",
+                        column: x => x.BuildingId,
                         principalTable: "Buildings",
-                        principalColumn: "Id",
+                        principalColumn: "BuildingId",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_CityBuilding_Cities_Id",
-                        column: x => x.Id,
+                        name: "FK_CityBuilding_Cities_CityId",
+                        column: x => x.CityId,
                         principalTable: "Cities",
-                        principalColumn: "Id",
+                        principalColumn: "CityId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -129,7 +130,7 @@ namespace StrategyGame.Dal.Migrations
                         name: "FK_CityArmy_Cities_Id",
                         column: x => x.Id,
                         principalTable: "Cities",
-                        principalColumn: "Id",
+                        principalColumn: "CityId",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_CityArmy_Units_Id",
@@ -154,7 +155,7 @@ namespace StrategyGame.Dal.Migrations
                         name: "FK_CityUnit_Cities_Id",
                         column: x => x.Id,
                         principalTable: "Cities",
-                        principalColumn: "Id",
+                        principalColumn: "CityId",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_CityUnit_Units_Id",
@@ -184,7 +185,7 @@ namespace StrategyGame.Dal.Migrations
                         name: "FK_CityUpgrade_Cities_Id",
                         column: x => x.Id,
                         principalTable: "Cities",
-                        principalColumn: "Id",
+                        principalColumn: "CityId",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_CityUpgrade_Upgrades_Id",
@@ -193,6 +194,43 @@ namespace StrategyGame.Dal.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
+
+            migrationBuilder.InsertData(
+                table: "Buildings",
+                columns: new[] { "BuildingId", "Grow_coral", "Grow_pop", "Name", "Price", "Space" },
+                values: new object[,]
+                {
+                    { 1, 200, 50, "áramlásirányító", 1000, 0 },
+                    { 2, 0, 0, "zátonyvár", 1000, 200 }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Units",
+                columns: new[] { "Id", "Attack", "Cost", "Defend", "Food", "Name", "Price" },
+                values: new object[,]
+                {
+                    { 1, 6, 1, 2, 1, "rohamfóka", 50 },
+                    { 2, 2, 1, 6, 1, "csatacsikó", 50 },
+                    { 3, 5, 3, 5, 2, "lézercápa", 100 }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Upgrades",
+                columns: new[] { "Id", "Attack", "Coral", "Defend", "Name", "Tax" },
+                values: new object[,]
+                {
+                    { 1, 0, 10, 0, "iszaptraktor", 0 },
+                    { 2, 0, 15, 0, "iszapkombájn", 0 },
+                    { 3, 0, 0, 20, "korallfal", 0 },
+                    { 4, 20, 0, 0, "szonárágyú", 0 },
+                    { 5, 10, 0, 10, "vízalatti harcművészetek", 0 },
+                    { 6, 0, 0, 0, "alkímia", 30 }
+                });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CityBuilding_BuildingId",
+                table: "CityBuilding",
+                column: "BuildingId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_CityUnit_UnitId",

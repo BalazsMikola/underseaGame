@@ -10,8 +10,8 @@ using StrategyGame.Dal;
 namespace StrategyGame.Dal.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20200316203713_init")]
-    partial class init
+    [Migration("20200317153746_initial")]
+    partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -23,7 +23,7 @@ namespace StrategyGame.Dal.Migrations
 
             modelBuilder.Entity("StrategyGame.Model.Entities.Building", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("BuildingId")
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
@@ -37,14 +37,34 @@ namespace StrategyGame.Dal.Migrations
 
                     b.Property<int>("Space");
 
-                    b.HasKey("Id");
+                    b.HasKey("BuildingId");
 
                     b.ToTable("Buildings");
+
+                    b.HasData(
+                        new
+                        {
+                            BuildingId = 1,
+                            Grow_coral = 200,
+                            Grow_pop = 50,
+                            Name = "áramlásirányító",
+                            Price = 1000,
+                            Space = 0
+                        },
+                        new
+                        {
+                            BuildingId = 2,
+                            Grow_coral = 0,
+                            Grow_pop = 0,
+                            Name = "zátonyvár",
+                            Price = 1000,
+                            Space = 200
+                        });
                 });
 
             modelBuilder.Entity("StrategyGame.Model.Entities.City", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("CityId")
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
@@ -58,7 +78,7 @@ namespace StrategyGame.Dal.Migrations
 
                     b.Property<int>("Rank");
 
-                    b.HasKey("Id");
+                    b.HasKey("CityId");
 
                     b.ToTable("Cities");
                 });
@@ -78,13 +98,17 @@ namespace StrategyGame.Dal.Migrations
 
             modelBuilder.Entity("StrategyGame.Model.Entities.CityBuilding", b =>
                 {
-                    b.Property<int>("Id");
+                    b.Property<int>("CityId");
+
+                    b.Property<int>("BuildingId");
 
                     b.Property<int>("Number");
 
                     b.Property<int>("RoundToFinish");
 
-                    b.HasKey("Id");
+                    b.HasKey("CityId", "BuildingId");
+
+                    b.HasIndex("BuildingId");
 
                     b.ToTable("CityBuilding");
                 });
@@ -149,6 +173,38 @@ namespace StrategyGame.Dal.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Units");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Attack = 6,
+                            Cost = 1,
+                            Defend = 2,
+                            Food = 1,
+                            Name = "rohamfóka",
+                            Price = 50
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Attack = 2,
+                            Cost = 1,
+                            Defend = 6,
+                            Food = 1,
+                            Name = "csatacsikó",
+                            Price = 50
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Attack = 5,
+                            Cost = 3,
+                            Defend = 5,
+                            Food = 2,
+                            Name = "lézercápa",
+                            Price = 100
+                        });
                 });
 
             modelBuilder.Entity("StrategyGame.Model.Entities.Upgrade", b =>
@@ -170,6 +226,62 @@ namespace StrategyGame.Dal.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Upgrades");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Attack = 0,
+                            Coral = 10,
+                            Defend = 0,
+                            Name = "iszaptraktor",
+                            Tax = 0
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Attack = 0,
+                            Coral = 15,
+                            Defend = 0,
+                            Name = "iszapkombájn",
+                            Tax = 0
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Attack = 0,
+                            Coral = 0,
+                            Defend = 20,
+                            Name = "korallfal",
+                            Tax = 0
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Attack = 20,
+                            Coral = 0,
+                            Defend = 0,
+                            Name = "szonárágyú",
+                            Tax = 0
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Attack = 10,
+                            Coral = 0,
+                            Defend = 10,
+                            Name = "vízalatti harcművészetek",
+                            Tax = 0
+                        },
+                        new
+                        {
+                            Id = 6,
+                            Attack = 0,
+                            Coral = 0,
+                            Defend = 0,
+                            Name = "alkímia",
+                            Tax = 30
+                        });
                 });
 
             modelBuilder.Entity("StrategyGame.Model.Entities.CityArmy", b =>
@@ -189,12 +301,12 @@ namespace StrategyGame.Dal.Migrations
                 {
                     b.HasOne("StrategyGame.Model.Entities.Building", "Building")
                         .WithMany("CityBuildings")
-                        .HasForeignKey("Id")
+                        .HasForeignKey("BuildingId")
                         .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("StrategyGame.Model.Entities.City", "City")
                         .WithMany("CityBuildings")
-                        .HasForeignKey("Id")
+                        .HasForeignKey("CityId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 

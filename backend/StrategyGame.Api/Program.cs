@@ -8,6 +8,7 @@ using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using StrategyGame.Dal;
 
 namespace StrategyGame.Api
 {
@@ -17,7 +18,7 @@ namespace StrategyGame.Api
         {
 
             CreateWebHostBuilder(args).Build().Run();
-        
+
         }
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
