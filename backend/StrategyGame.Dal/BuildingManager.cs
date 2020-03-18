@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using Microsoft.EntityFrameworkCore;
 using StrategyGame.Dal;
 using StrategyGame.Model.Entities;
 using StrategyGame.Model.Repository;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace StrategyGame.Model.DataManager
 {
@@ -17,12 +16,10 @@ namespace StrategyGame.Model.DataManager
             _applicationDbContext = context;
         }
 
-        public IEnumerable<Building> GetAll()
+        public async Task<List<Building>> GetAll()
         {
-            return _applicationDbContext.Buildings.ToList();
+            var buildings = await _applicationDbContext.Buildings.ToListAsync();
+            return buildings;
         }
-
-
     }
-
 }
