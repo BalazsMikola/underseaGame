@@ -1,26 +1,24 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using StrategyGame.Bll.Interface;
 using StrategyGame.Model.Entities;
 using StrategyGame.Model.Repository;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace StrategyGame.Dal
+namespace StrategyGame.Bll.Services
 {
-    public class BuildingController : ControllerBase
+    public class BuildingsAppSerice : IBuildingsAppSerice
     {
         private readonly IBuildingDataRepository<Building> _dataRepository;
 
-        public BuildingController(IBuildingDataRepository<Building> dataRepository)
+        public BuildingsAppSerice(IBuildingDataRepository<Building> dataRepository)
         {
             _dataRepository = dataRepository;
         }
 
-        [Route("api/buildings")]
-        [HttpGet]
-        public async Task<IActionResult> Get()
+        public async Task<IEnumerable<Building>> Get()
         {
             IEnumerable<Building> buildings = await _dataRepository.GetAll();
-            return Ok(buildings);
+            return buildings;
         }
     }
 }
