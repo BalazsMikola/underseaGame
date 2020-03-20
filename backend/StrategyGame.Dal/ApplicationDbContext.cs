@@ -1,5 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using StrategyGame.Model.Entities;
+using StrategyGame.Model.Identity;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
@@ -8,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace StrategyGame.Dal
 {
-    public class ApplicationDbContext : DbContext
+    public class ApplicationDbContext : IdentityDbContext<AppUser>
     {
 
         public DbSet<City> Cities { get; set; }
@@ -24,6 +26,7 @@ namespace StrategyGame.Dal
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            base.OnModelCreating(modelBuilder);
 
             modelBuilder.Entity<CityBuilding>()
                 .HasKey(x => new { x.CityId, x.BuildingId });
@@ -91,6 +94,9 @@ namespace StrategyGame.Dal
                    new Upgrade { Id = 6, Name = "alkímia", Coral = 0, Attack = 0, Defend = 0, Tax = 30 }
                 );
 
+            //modelBuilder.Entity<AppUserModel>()
+            //    .HasIndex(u => u.City)
+            //    .IsUnique();
         }
 
     }

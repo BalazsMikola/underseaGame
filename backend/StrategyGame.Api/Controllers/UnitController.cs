@@ -1,26 +1,27 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using StrategyGame.Model.Entities;
 using StrategyGame.Model.Repository;
-using System;
+using StrategyGame.Bll.Interface;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
-namespace StrategyGame.Dal
+namespace StrategyGame.Api.Controllers
 {
     public class UnitController : ControllerBase
     {
-        private readonly IUnitDataRepository<Unit> _dataRepository;
+        private readonly IUnitAppService _dataRepository;
 
-        public UnitController(IUnitDataRepository<Unit> dataRepository)
+        public UnitController(IUnitAppService dataRepository)
         {
             _dataRepository = dataRepository;
         }
 
         [Route("api/units")]
         [HttpGet]
-        public IActionResult Get()
+        public async Task<IActionResult> Get()
         {
-            IEnumerable<Unit> units = _dataRepository.GetAll();
+            IEnumerable<Unit> units = await _dataRepository.GetAll();
             return Ok(units);
         }
     }

@@ -5,7 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace StrategyGame.Dal
+namespace StrategyGame.Api.Controllers
 {
     public class CityController : ControllerBase
     {

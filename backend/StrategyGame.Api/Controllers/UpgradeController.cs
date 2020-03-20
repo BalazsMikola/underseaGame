@@ -1,26 +1,27 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using StrategyGame.Model.Entities;
 using StrategyGame.Model.Repository;
-using System;
+using StrategyGame.Bll.Interface;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
-namespace StrategyGame.Dal
+namespace StrategyGame.Api.Controllers
 {
     public class UpgradeController : ControllerBase
     {
-        private readonly IUpgradeDataRepository<Upgrade> _dataRepository;
+        private readonly IUpgradeAppService _dataRepository;
 
-        public UpgradeController(IUpgradeDataRepository<Upgrade> dataRepository)
+        public UpgradeController(IUpgradeAppService dataRepository)
         {
             _dataRepository = dataRepository;
         }
 
         [Route("api/upgrades")]
         [HttpGet]
-        public IActionResult Get()
+        public async Task<IActionResult> Get()
         {
-            IEnumerable<Upgrade> upgrades = _dataRepository.GetAll();
+            IEnumerable<Upgrade> upgrades = await _dataRepository.GetAll();
             return Ok(upgrades);
         }
     }
