@@ -10,7 +10,7 @@ using StrategyGame.Dal;
 namespace StrategyGame.Dal.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20200319074538_init")]
+    [Migration("20200320111348_init")]
     partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

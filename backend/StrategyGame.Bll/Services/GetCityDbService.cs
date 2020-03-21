@@ -1,12 +1,9 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.EntityFrameworkCore;
 using StrategyGame.Bll.Interface;
 using StrategyGame.Dal;
 using StrategyGame.Model.Entities;
-using StrategyGame.Model.Identity;
 using System;
-using System.Collections.Generic;
-using System.Text;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace StrategyGame.Bll.Services
@@ -20,12 +17,13 @@ namespace StrategyGame.Bll.Services
             _applicationDbContext = context;
         }
 
-        public async Task<City> GetCity(string userName)
+        public async Task<City> GetCity(string cityName)
         {
-            var userData = await _applicationDbContext.Users.FindAsync(userName);
-
-            return await _applicationDbContext.Cities.FindAsync(userData.City);
-
+            return await _applicationDbContext.Cities
+                .Where(city => city.Name == cityName)
+                .Include(city => city.CityBuildings)
+                .ThenInclude(building => building.Building)
+                .SingleOrDefaultAsync();
         }
     }
 }

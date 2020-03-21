@@ -11,6 +11,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Newtonsoft.Json;
 using StrategyGame.Bll.Interface;
 using StrategyGame.Bll.Services;
 using StrategyGame.Dal;
@@ -40,9 +41,17 @@ namespace StrategyGame.Api
             services.AddScoped<IUpgradeAppService, UpgradeAppService>();
             services.AddScoped<ICreateCityDbService, CreateCityDbService>();
             services.AddScoped<IGetCityDbService, GetCityDbService>();
-            services.AddDefaultIdentity<AppUser>().AddEntityFrameworkStores<ApplicationDbContext>();
-                //.AddDefaultTokenProviders();
+            services.AddDefaultIdentity<AppUser>(config =>
+            {
+                config.Password.RequiredUniqueChars = 0;
+                config.Password.RequireUppercase = false;
+            }).AddEntityFrameworkStores<ApplicationDbContext>()
+              .AddDefaultTokenProviders();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            services.AddMvc().AddJsonOptions(options => {
+                    options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+                });
+            services.AddCors();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -52,6 +61,12 @@ namespace StrategyGame.Api
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            app.UseCors(builder => builder.WithOrigins("http://localhost:4200")
+                .AllowAnyHeader()
+                .AllowAnyMethod()
+                );
+                
 
             app.UseAuthentication();
             app.UseMvc();

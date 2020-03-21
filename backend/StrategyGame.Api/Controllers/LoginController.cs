@@ -15,10 +15,12 @@ namespace StrategyGame.Api.Controllers
     {
         private readonly IGetCityDbService _dataRepository;
         private SignInManager<AppUser> signInManager { get; }
+        private UserManager<AppUser> userManager { get; }
 
-        public LoginController(SignInManager<AppUser> signInMgr, IGetCityDbService dataRepository)
+        public LoginController(SignInManager<AppUser> signInMgr, UserManager<AppUser> userMgr, IGetCityDbService dataRepository)
         {
             signInManager = signInMgr;
+            userManager = userMgr;
             _dataRepository = dataRepository;
         }
 
@@ -26,18 +28,21 @@ namespace StrategyGame.Api.Controllers
         [HttpPost]
         public async Task<IActionResult> Login([FromBody] LoginModel model)
         {
+            
             var result = await signInManager.PasswordSignInAsync(model.User, model.Password, true, false);
 
             if (result.Succeeded)
             {
-
                 var jwt = JwtTokenAppService.CreateToken(model);
-                var cityData = await _dataRepository.GetCity(model.User);
+                var userData = await userManager.FindByNameAsync(model.User);
+                var cityData = await _dataRepository.GetCity(userData.City);
 
-                return Ok(cityData);
+                var response = new { token = jwt, data = cityData };
+
+                return Ok(response);
             }
 
-            return Unauthorized();
+            return Unauthorized("Invalid username or password!");
 
         }
 

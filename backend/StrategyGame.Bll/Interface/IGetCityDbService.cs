@@ -11,6 +11,6 @@ namespace StrategyGame.Bll.Interface
 {
     public interface IGetCityDbService
     {
-        Task<City> GetCity(string userName);
+        Task<City> GetCity(string cityName);
     }
 }
