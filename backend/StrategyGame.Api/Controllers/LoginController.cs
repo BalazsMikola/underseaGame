@@ -8,6 +8,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using StrategyGame.Bll.Interface;
 using StrategyGame.Model.Entities;
+using Microsoft.AspNetCore.Authorization;
 
 namespace StrategyGame.Api.Controllers
 {
@@ -34,12 +35,8 @@ namespace StrategyGame.Api.Controllers
             if (result.Succeeded)
             {
                 var jwt = JwtTokenAppService.CreateToken(model);
-                var userData = await userManager.FindByNameAsync(model.User);
-                var cityData = await _dataRepository.GetCity(userData.City);
 
-                var response = new { token = jwt, data = cityData };
-
-                return Ok(response);
+                return Ok(jwt);
             }
 
             return Unauthorized("Invalid username or password!");

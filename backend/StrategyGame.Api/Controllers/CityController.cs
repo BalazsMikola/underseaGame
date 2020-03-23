@@ -24,32 +24,6 @@ namespace StrategyGame.Api.Controllers
             return Ok(Cities);
         }
 
-        [Route("api/city/{id}")]
-        [HttpGet("{id}", Name = "Get")]
-        public IActionResult Get(long id)
-        {
-            City City = _dataRepository.Get(id);
-
-            if (City == null)
-            {
-                return NotFound("The City record couldn't be found.");
-            }
-
-            return Ok(City);
-        }
-
-        [Route("api/city")]
-        [HttpPost]
-        public IActionResult Post([FromBody] City City)
-        {
-            if (City == null)
-            {
-                return BadRequest("City is null.");
-            }
-
-            _dataRepository.Add(City);
-            return CreatedAtRoute("Get", new { Id = City.CityId }, City);
-        }
 
     }
 }

@@ -15,6 +15,7 @@ export class ServerAccessService {
   private serverUrl: string = environment.serverUrl;
   private pathLogin: string = environment.pathLogin;
   private pathRegister: string = environment.pathRegister;
+  private pathGetCity: string = environment.pathGetCity;
 
 
   constructor(private http: HttpClient) { }
@@ -36,6 +37,11 @@ export class ServerAccessService {
       Password: password
     };
     return this.http.post(`${this.serverUrl}${this.pathLogin}`, requiestBody);
+  }
+
+
+  public getCityData(): Observable<object> {
+    return this.http.get(`${this.serverUrl}${this.pathGetCity}`);
   }
 
 

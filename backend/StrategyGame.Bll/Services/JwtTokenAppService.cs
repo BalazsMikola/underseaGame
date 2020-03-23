@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Security.Claims;
 using System.Text;
+using System.Linq;
 
 namespace StrategyGame.Bll.Services
 {
@@ -32,6 +33,16 @@ namespace StrategyGame.Bll.Services
                 token = new JwtSecurityTokenHandler().WriteToken(token),
                 expiration = token.ValidTo
             };
+        }
+
+        public static string decodeTokenForUserName(string jwt)
+        {
+
+            jwt = jwt.Replace("Bearer ", string.Empty);
+            JwtSecurityTokenHandler handler = new JwtSecurityTokenHandler();
+            var token = handler.ReadJwtToken(jwt);
+            return token.Claims.First(claim => claim.Type == "sub").Value;
+
         }
     }
 }

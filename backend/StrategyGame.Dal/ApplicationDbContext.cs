@@ -94,9 +94,6 @@ namespace StrategyGame.Dal
                    new Upgrade { Id = 6, Name = "alkímia", Coral = 0, Attack = 0, Defend = 0, Tax = 30 }
                 );
 
-            //modelBuilder.Entity<AppUserModel>()
-            //    .HasIndex(u => u.City)
-            //    .IsUnique();
         }
 
     }
