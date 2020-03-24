@@ -7,7 +7,7 @@ namespace StrategyGame.Model.Entities
 {
     public class Upgrade
     {
-        public int Id { get; set; }
+        public int UpgradeId { get; set; }
 
         public string Name { get; set; }
 
@@ -18,6 +18,8 @@ namespace StrategyGame.Model.Entities
         public int Attack { get; set; }
 
         public int Tax { get; set; }
+
+        public virtual ICollection<CityUpgrade> CityUpgrades { get; set; }
 
     }
 }

@@ -7,7 +7,6 @@ namespace StrategyGame.Model.Entities
 {
     public class Building
     {
-
         public int BuildingId { get; set; }
 
         public string Name { get; set; }

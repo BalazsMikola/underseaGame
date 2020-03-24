@@ -13,33 +13,71 @@ namespace StrategyGame.Bll.Services
     public class CreateCityDbService : ICreateCityDbService
     {
         readonly ApplicationDbContext _applicationDbContext;
+        //private readonly IGetCityDbService _cityService;
 
-        public CreateCityDbService(ApplicationDbContext context)
+        public CreateCityDbService(
+            ApplicationDbContext context
+            //IGetCityDbService cityService
+        )
         {
             _applicationDbContext = context;
+            //_cityService = cityService;
         }
 
         public async Task<IdentityResult> CreateCity(string cityName)
         {
-            var newCity = new City
+            using (_applicationDbContext)
             {
-                Name = cityName,
-                Population = 100,
-                Pearl = 50,
-                Coral = 20,
-                Rank = 0
-            };
+                City newCity = new City
+                {
+                    Name = cityName,
+                    Population = 100,
+                    Pearl = 50,
+                    Coral = 20,
+                    Rank = 0
+                };
+                _applicationDbContext.Cities.Add(newCity);
 
-            _applicationDbContext.Cities.Add(newCity);
+                CityBuilding cityBuildingData1 = new CityBuilding
+                {
+                    CityId = newCity.CityId,
+                    BuildingId = 1,
+                    Number = 0,
+                    RoundToFinish = 0,
+                };
+                _applicationDbContext.CityBuildings.Add(cityBuildingData1);
 
-            var success = await _applicationDbContext.SaveChangesAsync() > 0;
+                CityBuilding cityBuildingData2 = new CityBuilding
+                {
+                    CityId = newCity.CityId,
+                    BuildingId = 2,
+                    Number = 0,
+                    RoundToFinish = 0,
+                };
+                _applicationDbContext.CityBuildings.Add(cityBuildingData2);
 
-            if (!success)
-            {
-                return IdentityResult.Failed();
+                for (var i=1; i<=6; i++)
+                {
+                    CityUpgrade cityUpgradeData = new CityUpgrade
+                    {
+                        CityId = newCity.CityId,
+                        UpgradeId = i,
+                        Number = 0,
+                        RoundToFinish = 0,
+                    };
+                    _applicationDbContext.CityUpgrades.Add(cityUpgradeData);
+                }
+
+                var success = await _applicationDbContext.SaveChangesAsync() > 0;
+  
+                if (!success)
+                {
+                    return IdentityResult.Failed();
+                }
+
+                return IdentityResult.Success;
+
             }
-
-            return IdentityResult.Success;
         }
 
     }

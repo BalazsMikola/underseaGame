@@ -8,6 +8,8 @@ namespace StrategyGame.Model.Entities
     public class CityBuilding
     {
 
+        public int Id { get; set; }
+
         public int CityId { get; set; }
 
         public int BuildingId { get; set; }

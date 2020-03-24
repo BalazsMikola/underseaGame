@@ -10,7 +10,7 @@ using StrategyGame.Dal;
 namespace StrategyGame.Dal.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20200320111348_init")]
+    [Migration("20200324080116_init")]
     partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -135,6 +135,25 @@ namespace StrategyGame.Dal.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
+            modelBuilder.Entity("StrategyGame.Model.Entities.Army", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("ArmyNumber");
+
+                    b.Property<int>("Number");
+
+                    b.Property<int>("UnitId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UnitId");
+
+                    b.ToTable("Armies");
+                });
+
             modelBuilder.Entity("StrategyGame.Model.Entities.Building", b =>
                 {
                     b.Property<int>("BuildingId")
@@ -201,56 +220,84 @@ namespace StrategyGame.Dal.Migrations
                 {
                     b.Property<int>("Id");
 
+                    b.Property<int>("ArmyNumber");
+
+                    b.Property<int>("CityId");
+
                     b.Property<int>("EnemyId");
 
-                    b.Property<int>("Number");
-
                     b.HasKey("Id");
+
+                    b.HasIndex("CityId");
 
                     b.ToTable("CityArmy");
                 });
 
             modelBuilder.Entity("StrategyGame.Model.Entities.CityBuilding", b =>
                 {
-                    b.Property<int>("CityId");
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<int>("BuildingId");
+
+                    b.Property<int>("CityId");
 
                     b.Property<int>("Number");
 
                     b.Property<int>("RoundToFinish");
 
-                    b.HasKey("CityId", "BuildingId");
+                    b.HasKey("Id");
 
                     b.HasIndex("BuildingId");
 
-                    b.ToTable("CityBuilding");
-                });
+                    b.HasIndex("CityId");
 
-            modelBuilder.Entity("StrategyGame.Model.Entities.CityUnit", b =>
-                {
-                    b.Property<int>("Id");
-
-                    b.Property<int>("Number");
-
-                    b.Property<int?>("UnitId");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UnitId");
-
-                    b.ToTable("CityUnit");
+                    b.ToTable("CityBuildings");
                 });
 
             modelBuilder.Entity("StrategyGame.Model.Entities.CityUpgrade", b =>
                 {
-                    b.Property<int>("Id");
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("CityId");
+
+                    b.Property<int>("Number");
 
                     b.Property<int>("RoundToFinish");
 
+                    b.Property<int>("UpgradeId");
+
                     b.HasKey("Id");
 
+                    b.HasIndex("CityId");
+
+                    b.HasIndex("UpgradeId");
+
                     b.ToTable("CityUpgrade");
+                });
+
+            modelBuilder.Entity("StrategyGame.Model.Entities.CityUpgrades", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("CityId");
+
+                    b.Property<int>("Number");
+
+                    b.Property<int>("UnitId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CityId");
+
+                    b.HasIndex("UnitId");
+
+                    b.ToTable("CityUpgrades");
                 });
 
             modelBuilder.Entity("StrategyGame.Model.Entities.Rounds", b =>
@@ -272,6 +319,8 @@ namespace StrategyGame.Dal.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<int?>("ArmyId");
+
                     b.Property<int>("Attack");
 
                     b.Property<int>("Cost");
@@ -285,6 +334,8 @@ namespace StrategyGame.Dal.Migrations
                     b.Property<int>("Price");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ArmyId");
 
                     b.ToTable("Units");
 
@@ -323,7 +374,7 @@ namespace StrategyGame.Dal.Migrations
 
             modelBuilder.Entity("StrategyGame.Model.Entities.Upgrade", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("UpgradeId")
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
@@ -337,14 +388,14 @@ namespace StrategyGame.Dal.Migrations
 
                     b.Property<int>("Tax");
 
-                    b.HasKey("Id");
+                    b.HasKey("UpgradeId");
 
                     b.ToTable("Upgrades");
 
                     b.HasData(
                         new
                         {
-                            Id = 1,
+                            UpgradeId = 1,
                             Attack = 0,
                             Coral = 10,
                             Defend = 0,
@@ -353,7 +404,7 @@ namespace StrategyGame.Dal.Migrations
                         },
                         new
                         {
-                            Id = 2,
+                            UpgradeId = 2,
                             Attack = 0,
                             Coral = 15,
                             Defend = 0,
@@ -362,7 +413,7 @@ namespace StrategyGame.Dal.Migrations
                         },
                         new
                         {
-                            Id = 3,
+                            UpgradeId = 3,
                             Attack = 0,
                             Coral = 0,
                             Defend = 20,
@@ -371,7 +422,7 @@ namespace StrategyGame.Dal.Migrations
                         },
                         new
                         {
-                            Id = 4,
+                            UpgradeId = 4,
                             Attack = 20,
                             Coral = 0,
                             Defend = 0,
@@ -380,7 +431,7 @@ namespace StrategyGame.Dal.Migrations
                         },
                         new
                         {
-                            Id = 5,
+                            UpgradeId = 5,
                             Attack = 10,
                             Coral = 0,
                             Defend = 10,
@@ -389,7 +440,7 @@ namespace StrategyGame.Dal.Migrations
                         },
                         new
                         {
-                            Id = 6,
+                            UpgradeId = 6,
                             Attack = 0,
                             Coral = 0,
                             Defend = 0,
@@ -500,15 +551,23 @@ namespace StrategyGame.Dal.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
+            modelBuilder.Entity("StrategyGame.Model.Entities.Army", b =>
+                {
+                    b.HasOne("StrategyGame.Model.Entities.Unit", "Unit")
+                        .WithMany()
+                        .HasForeignKey("UnitId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
             modelBuilder.Entity("StrategyGame.Model.Entities.CityArmy", b =>
                 {
                     b.HasOne("StrategyGame.Model.Entities.City", "City")
                         .WithMany("CityArmies")
-                        .HasForeignKey("Id")
+                        .HasForeignKey("CityId")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("StrategyGame.Model.Entities.Unit", "Unit")
-                        .WithOne("Army")
+                    b.HasOne("StrategyGame.Model.Entities.Army", "Army")
+                        .WithOne()
                         .HasForeignKey("StrategyGame.Model.Entities.CityArmy", "Id")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
@@ -526,34 +585,37 @@ namespace StrategyGame.Dal.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("StrategyGame.Model.Entities.CityUnit", b =>
-                {
-                    b.HasOne("StrategyGame.Model.Entities.City", "City")
-                        .WithMany("CityUnits")
-                        .HasForeignKey("Id")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("StrategyGame.Model.Entities.Unit", "Unit")
-                        .WithMany()
-                        .HasForeignKey("Id")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("StrategyGame.Model.Entities.Unit")
-                        .WithMany("CityUnits")
-                        .HasForeignKey("UnitId");
-                });
-
             modelBuilder.Entity("StrategyGame.Model.Entities.CityUpgrade", b =>
                 {
                     b.HasOne("StrategyGame.Model.Entities.City", "City")
-                        .WithOne("Upgrade")
-                        .HasForeignKey("StrategyGame.Model.Entities.CityUpgrade", "Id")
+                        .WithMany("CityUpgrades")
+                        .HasForeignKey("CityId")
                         .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("StrategyGame.Model.Entities.Upgrade", "Upgrade")
-                        .WithMany()
-                        .HasForeignKey("Id")
+                        .WithMany("CityUpgrades")
+                        .HasForeignKey("UpgradeId")
                         .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("StrategyGame.Model.Entities.CityUpgrades", b =>
+                {
+                    b.HasOne("StrategyGame.Model.Entities.City", "City")
+                        .WithMany()
+                        .HasForeignKey("CityId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("StrategyGame.Model.Entities.Unit", "Unit")
+                        .WithMany("CityUnits")
+                        .HasForeignKey("UnitId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("StrategyGame.Model.Entities.Unit", b =>
+                {
+                    b.HasOne("StrategyGame.Model.Entities.CityArmy", "Army")
+                        .WithMany()
+                        .HasForeignKey("ArmyId");
                 });
 #pragma warning restore 612, 618
         }

@@ -22,9 +22,9 @@ namespace StrategyGame.Model.Entities
 
         public virtual ICollection<CityBuilding> CityBuildings { get; set; }
 
-        public virtual CityUpgrade Upgrade { get; set; }
+        public virtual ICollection<CityUpgrade> CityUpgrades { get; set; }
 
-        public virtual ICollection<CityUnit> CityUnits { get; set; }
+        //public virtual ICollection<CityUnit> CityUnits { get; set; }
 
         public virtual ICollection<CityArmy> CityArmies { get; set; }
 

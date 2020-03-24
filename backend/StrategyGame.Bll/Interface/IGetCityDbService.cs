@@ -6,11 +6,12 @@ using System.Threading.Tasks;
 using StrategyGame.Model.Entities;
 using Microsoft.AspNetCore.Mvc;
 using StrategyGame.Model.Identity;
+using StrategyGame.Model.DTOs;
 
 namespace StrategyGame.Bll.Interface
 {
     public interface IGetCityDbService
     {
-        Task<City> GetCity(string cityName);
+        Task<CityDto> GetCity(string cityName);
     }
 }

@@ -28,13 +28,13 @@ namespace StrategyGame.Api.Controllers
         [HttpPost]
         public async Task<IActionResult> Register([FromBody]RegisterModel model)
         {
-
+           
             var userExists = await userManager.FindByNameAsync(model.User);
             if (userExists != null)
             {
                 return BadRequest("user already exists");
             }
-
+            
             var cityExists = await _cityService.GetCity(model.City);
             if (cityExists != null)
             {
@@ -46,6 +46,8 @@ namespace StrategyGame.Api.Controllers
                 UserName = model.User,
                 City = model.City
             };
+
+            //Console.WriteLine("//////////////////////////////////////////");
 
             var result = await userManager.CreateAsync(newUser, model.Password);
             if (result.Succeeded)

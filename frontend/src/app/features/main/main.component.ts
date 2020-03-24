@@ -4,6 +4,8 @@ import { AuthenticationService } from '../../core/authentication/authentication.
 import { ServerAccessService } from '../../core/http/serverAccess.service';
 import { take } from 'rxjs/operators';
 import { Router } from '@angular/router';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { ICity } from 'src/app/shared/models/ICity';
 
 @Component({
   selector: 'app-main',
@@ -12,6 +14,12 @@ import { Router } from '@angular/router';
 })
 export class MainComponent implements OnInit {
 
+  // cityDataSubject: BehaviorSubject<object> = new BehaviorSubject(null);
+  // cityData: Observable<object> = this.cityDataSubject.asObservable();
+
+  cityData = {};
+  // dataFetched = false;
+
   constructor(
     private authenticationService: AuthenticationService,
     private serverAccessService: ServerAccessService,
@@ -19,11 +27,12 @@ export class MainComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.serverAccessService.getCityData();
     this.serverAccessService.getCityData().pipe(take(1)).subscribe(cityData => {
       if (cityData) {
-        console.log(cityData);
-        this.router.navigate(['/']);
+        this.cityData = cityData;
+        // this.cityDataSubject.next(cityData);
+        // this.dataFetched = true;
+        // this.router.navigate(['/']);
       }
     }, error => {
       if (error.status === 401) {
@@ -34,6 +43,8 @@ export class MainComponent implements OnInit {
 
   onLogout(): void {
     this.authenticationService.logout();
+    // console.log(this.cityDataSubject['value']);
+
   }
 
 

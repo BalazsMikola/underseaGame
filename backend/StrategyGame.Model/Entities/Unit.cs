@@ -21,7 +21,7 @@ namespace StrategyGame.Model.Entities
 
         public int Food { get; set; }
 
-        public virtual ICollection<CityUnit> CityUnits { get; set; }
+        public virtual ICollection<CityUpgrades> CityUnits { get; set; }
 
         public virtual CityArmy Army { get; set; }
 
