@@ -7,7 +7,7 @@ namespace StrategyGame.Model.DTOs
 {
     public class CityDto
     {
-
+        public int Id { get; set; }
         public string Name { get; set; }
 
         public int Population { get; set; }
@@ -18,11 +18,11 @@ namespace StrategyGame.Model.DTOs
 
         public int Rank { get; set; }
 
-        public ICollection<CityBuilding> CityBuildings { get; set; }
+        public ICollection<CityBuildingDto> CityBuildings { get; set; }
 
-        public ICollection<CityUpgrade> CityUpgrades { get; set; }
+        public ICollection<CityUpgradesDto> CityUpgrades { get; set; }
 
-        public ICollection<CityArmy> CityArmies { get; set; }
+        public ICollection<ArmyDto> Armies { get; set; }
 
     }
 }

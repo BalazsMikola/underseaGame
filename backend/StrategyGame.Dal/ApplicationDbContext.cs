@@ -1,12 +1,8 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using StrategyGame.Model.Entities;
+using StrategyGame.Model.Enums;
 using StrategyGame.Model.Identity;
-using System;
-using System.Collections.Generic;
-using System.Data.SqlClient;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace StrategyGame.Dal
 {
@@ -21,6 +17,7 @@ namespace StrategyGame.Dal
         public DbSet<Army> Armies { get; set; }
         public DbSet<CityBuilding> CityBuildings { get; set; }
         public DbSet<CityUpgrade> CityUpgrades { get; set; }
+        public DbSet<ArmyUnit> ArmyUnits { get; set; }
 
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
@@ -31,75 +28,41 @@ namespace StrategyGame.Dal
         {
             base.OnModelCreating(modelBuilder);
 
-            //modelBuilder.Entity<CityBuilding>()
-            //    .HasKey(x => new { x.CityId, x.BuildingId });
-            modelBuilder.Entity<CityBuilding>()
-                .HasOne(cb => cb.City)
-                .WithMany(c => c.CityBuildings)
-                .HasForeignKey(cb => cb.CityId);
-            modelBuilder.Entity<CityBuilding>()
-                .HasOne(cb => cb.Building)
-                .WithMany(b => b.CityBuildings)
+            modelBuilder.Entity<Building>()
+                .HasMany(cb => cb.CityBuildings)
+                .WithOne(b => b.Building)
                 .HasForeignKey(cb => cb.BuildingId);
 
-
-            //modelBuilder.Entity<CityUpgrade>()
-            //    .HasKey(x => new { x.CityId, x.UpgradeId });
-            modelBuilder.Entity<CityUpgrade>()
-                .HasOne(cu => cu.City)
-                .WithMany(u => u.CityUpgrades)
+            modelBuilder.Entity<City>()
+                .HasMany(cu => cu.CityUpgrades)
+                .WithOne(u => u.City)
                 .HasForeignKey(cu => cu.CityId);
-            modelBuilder.Entity<CityUpgrade>()
-                .HasOne(cu => cu.Upgrade)
-                .WithMany(u => u.CityUpgrades)
+
+            modelBuilder.Entity<City>()
+                .HasMany(cb => cb.CityBuildings)
+                .WithOne(c => c.City)
+                .HasForeignKey(cb => cb.CityId);
+
+            modelBuilder.Entity<City>()
+                .HasMany(cu => cu.Armies)
+                .WithOne(c => c.City)
+                .HasForeignKey(cu => cu.CityId);
+
+            modelBuilder.Entity<Upgrade>()
+                .HasMany(cu => cu.CityUpgrades)
+                .WithOne(u => u.Upgrade)
                 .HasForeignKey(cu => cu.UpgradeId);
 
+            modelBuilder.Entity<Army>()
+                .HasMany(cu => cu.ArmyUnits)
+                .WithOne(u => u.Army)
+                .HasForeignKey(cu => cu.ArmyId);
 
-            modelBuilder.Entity<CityArmy>()
-                .HasOne(cu => cu.City)
-                .WithMany(c => c.CityArmies)
-                .HasForeignKey(cu => cu.CityId);
-            modelBuilder.Entity<CityArmy>()
-                .HasOne(ca => ca.Army)
-                .WithOne()
-                .HasForeignKey<CityArmy>(cu => cu.Id);
-
-
-            //modelBuilder.Entity<CityUpgrade>()
-            //    .HasOne(cu => cu.City)
-            //    .WithOne(u => u.Upgrade)
-            //    .HasForeignKey<CityUpgrade>(cu => cu.Id);
-            //modelBuilder.Entity<CityUpgrade>()
-            //    .HasOne(cu => cu.Upgrade)
-            //    .WithMany()
-            //    .HasForeignKey(cu => cu.Id);
-
-            //modelBuilder.Entity<CityUnit>()
-            //    .HasKey(x => new { x.CityId, x.UnitId });
-            //modelBuilder.Entity<CityUnit>()
-            //    .HasOne(cu => cu.City)
-            //    .WithMany(u => u.CityUnits)
-            //    .HasForeignKey(cu => cu.CityId);
-            //modelBuilder.Entity<CityUnit>()
-            //    .HasOne(cu => cu.Unit)
-            //    .WithMany()
-            //    .HasForeignKey(cu => cu.UnitId);
-
-            //modelBuilder.Entity<CityArmy>()
-            //    .HasKey(x => new { x.CityId, x.UnitId });
-            //modelBuilder.Entity<CityArmy>()
-            //    .HasOne(ca => ca.City)
-            //    .WithMany(a => a.CityArmies)
-            //    .HasForeignKey(ca => ca.CityId);
-            //modelBuilder.Entity<CityArmy>()
-            //    .HasOne(ca => ca.Unit)
-            //    .WithOne()
-            //    .HasForeignKey<CityArmy>(ca => ca.UnitId);
 
             modelBuilder.Entity<Building>()
                 .HasData(
-                    new Building { BuildingId = 1, Name = "áramlásirányító", Price = 1000, Grow_pop = 50, Grow_coral = 200, Space = 0 },
-                    new Building { BuildingId = 2, Name = "zátonyvár", Price = 1000, Grow_pop = 0, Grow_coral = 0, Space = 200 }
+                    new Building { Id = (int)BuildingTypeEnum.Aramlasiranyito, Name = "áramlásirányító", Price = 1000, Grow_pop = 50, Grow_coral = 200, Space = 0 },
+                    new Building { Id = (int)BuildingTypeEnum.Zatonyvar, Name = "zátonyvár", Price = 1000, Grow_pop = 0, Grow_coral = 0, Space = 200 }
                 );
 
             modelBuilder.Entity<Unit>()
@@ -111,12 +74,12 @@ namespace StrategyGame.Dal
 
             modelBuilder.Entity<Upgrade>()
                .HasData(
-                   new Upgrade { UpgradeId = 1, Name = "iszaptraktor", Coral = 10, Attack = 0, Defend = 0, Tax = 0 },
-                   new Upgrade { UpgradeId = 2, Name = "iszapkombájn", Coral = 15, Attack = 0, Defend = 0, Tax = 0 },
-                   new Upgrade { UpgradeId = 3, Name = "korallfal", Coral = 0, Attack = 0, Defend = 20, Tax = 0 },
-                   new Upgrade { UpgradeId = 4, Name = "szonárágyú", Coral = 0, Attack = 20, Defend = 0, Tax = 0 },
-                   new Upgrade { UpgradeId = 5, Name = "vízalatti harcművészetek", Coral = 0, Attack = 10, Defend = 10, Tax = 0 },
-                   new Upgrade { UpgradeId = 6, Name = "alkímia", Coral = 0, Attack = 0, Defend = 0, Tax = 30 }
+                   new Upgrade { Id = 1, Name = "iszaptraktor", Coral = 10, Attack = 0, Defend = 0, Tax = 0 },
+                   new Upgrade { Id = 2, Name = "iszapkombájn", Coral = 15, Attack = 0, Defend = 0, Tax = 0 },
+                   new Upgrade { Id = 3, Name = "korallfal", Coral = 0, Attack = 0, Defend = 20, Tax = 0 },
+                   new Upgrade { Id = 4, Name = "szonárágyú", Coral = 0, Attack = 20, Defend = 0, Tax = 0 },
+                   new Upgrade { Id = 5, Name = "vízalatti harcművészetek", Coral = 0, Attack = 10, Defend = 10, Tax = 0 },
+                   new Upgrade { Id = 6, Name = "alkímia", Coral = 0, Attack = 0, Defend = 0, Tax = 30 }
                 );
 
         }

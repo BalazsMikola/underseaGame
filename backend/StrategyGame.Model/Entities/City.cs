@@ -5,11 +5,8 @@ using System.Threading.Tasks;
 
 namespace StrategyGame.Model.Entities
 {
-    public class City
+    public class City : Entity
     {
-
-        public int CityId { get; set; }
-
         public string Name { get; set; }
 
         public int Population { get; set; }
@@ -24,9 +21,7 @@ namespace StrategyGame.Model.Entities
 
         public virtual ICollection<CityUpgrade> CityUpgrades { get; set; }
 
-        //public virtual ICollection<CityUnit> CityUnits { get; set; }
-
-        public virtual ICollection<CityArmy> CityArmies { get; set; }
+        public virtual ICollection<Army> Armies { get; set; }
 
     }
 }

@@ -4,10 +4,8 @@ using System.Text;
 
 namespace StrategyGame.Model.Entities
 {
-    public class Rounds
+    public class Rounds : Entity
     {
-        public int Id { get; set; }
-
         public int ElapsedRounds { get; set; }
     }
 }

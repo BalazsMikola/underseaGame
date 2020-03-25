@@ -25,7 +25,7 @@ namespace StrategyGame.Model.DataManager
         public City Get(long id)
         {
             return _applicationDbContext.Cities
-                  .FirstOrDefault(e => e.CityId == id);
+                  .FirstOrDefault(e => e.Id == id);
         }
 
         public void Add(City entity)

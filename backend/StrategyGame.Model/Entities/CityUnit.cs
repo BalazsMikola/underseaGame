@@ -4,9 +4,8 @@ using System.Text;
 
 namespace StrategyGame.Model.Entities
 {
-    public class CityUpgrades
+    public class CityUpgrades : Entity
     {
-        public int Id { get; set; }
         public int CityId { get; set; }
 
         public int UnitId { get; set; }

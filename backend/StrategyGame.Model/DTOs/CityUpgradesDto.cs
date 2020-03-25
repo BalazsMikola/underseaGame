@@ -1,17 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using System.Text;
 
-namespace StrategyGame.Model.Entities
+namespace StrategyGame.Model.DTOs
 {
-    public class CityUpgrade : Entity
+    public class CityUpgradesDto
     {
         public int CityId { get; set; }
-        public City City { get; set; }
 
         public int UpgradeId { get; set; }
-        public Upgrade Upgrade { get; set; }
+        public UpgradeDto Upgrade { get; set; }
 
         public int Number { get; set; }
 

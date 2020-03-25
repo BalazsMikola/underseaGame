@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using System.Text;
 
-namespace StrategyGame.Model.Entities
+namespace StrategyGame.Model.DTOs
 {
-    public class Building : Entity
+    public class BuildingDto
     {
         public string Name { get; set; }
 
@@ -16,9 +15,5 @@ namespace StrategyGame.Model.Entities
         public int Grow_coral { get; set; }
 
         public int Space { get; set; }
-
-        public virtual ICollection<CityBuilding> CityBuildings { get; set; }
-
-
     }
 }

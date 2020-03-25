@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using System.Text;
 
-namespace StrategyGame.Model.Entities
+namespace StrategyGame.Model.DTOs
 {
-    public class Upgrade : Entity
+    public class UpgradeDto
     {
         public string Name { get; set; }
 
@@ -16,8 +15,5 @@ namespace StrategyGame.Model.Entities
         public int Attack { get; set; }
 
         public int Tax { get; set; }
-
-        public virtual ICollection<CityUpgrade> CityUpgrades { get; set; }
-
     }
 }

@@ -9,7 +9,7 @@ import { RouteConfigLoadEnd } from '@angular/router';
 })
 export class HeaderComponent implements OnInit {
 
-  private cityData = new BehaviorSubject<object>(null);
+  cityData = new BehaviorSubject<object>(null);
 
   round = 0;
   rank = 0;
@@ -21,20 +21,18 @@ export class HeaderComponent implements OnInit {
   aramlasiranyito = 0;
   zatonyvar = 0;
 
-    @Input() set data(value) {
-      this.cityData.next(value);
-    }
+  @Input() set data(value) {
+    this.cityData.next(value);
+  }
 
   constructor() { }
 
   ngOnInit() {
-    // this.cityData
-    // .subscribe(updatedData => {
-    //     this.coral = updatedData['coral']
-    // });
+
   }
 
-  ngOnDestroy(){
+  // tslint:disable-next-line: use-lifecycle-interface
+  ngOnDestroy() {
     this.cityData.unsubscribe();
   }
 

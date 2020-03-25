@@ -14,11 +14,7 @@ import { ICity } from 'src/app/shared/models/ICity';
 })
 export class MainComponent implements OnInit {
 
-  // cityDataSubject: BehaviorSubject<object> = new BehaviorSubject(null);
-  // cityData: Observable<object> = this.cityDataSubject.asObservable();
-
   cityData = {};
-  // dataFetched = false;
 
   constructor(
     private authenticationService: AuthenticationService,
@@ -30,9 +26,6 @@ export class MainComponent implements OnInit {
     this.serverAccessService.getCityData().pipe(take(1)).subscribe(cityData => {
       if (cityData) {
         this.cityData = cityData;
-        // this.cityDataSubject.next(cityData);
-        // this.dataFetched = true;
-        // this.router.navigate(['/']);
       }
     }, error => {
       if (error.status === 401) {
@@ -43,8 +36,6 @@ export class MainComponent implements OnInit {
 
   onLogout(): void {
     this.authenticationService.logout();
-    // console.log(this.cityDataSubject['value']);
-
   }
 
 

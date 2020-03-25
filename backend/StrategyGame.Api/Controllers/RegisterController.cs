@@ -47,8 +47,6 @@ namespace StrategyGame.Api.Controllers
                 City = model.City
             };
 
-            //Console.WriteLine("//////////////////////////////////////////");
-
             var result = await userManager.CreateAsync(newUser, model.Password);
             if (result.Succeeded)
             {

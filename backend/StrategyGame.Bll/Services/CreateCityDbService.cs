@@ -7,21 +7,18 @@ using System.Threading.Tasks;
 using StrategyGame.Model.Entities;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.AspNetCore.Identity;
+using StrategyGame.Model.Enums;
+using System.Linq;
 
 namespace StrategyGame.Bll.Services
 {
     public class CreateCityDbService : ICreateCityDbService
     {
         readonly ApplicationDbContext _applicationDbContext;
-        //private readonly IGetCityDbService _cityService;
 
-        public CreateCityDbService(
-            ApplicationDbContext context
-            //IGetCityDbService cityService
-        )
+        public CreateCityDbService(ApplicationDbContext context)
         {
             _applicationDbContext = context;
-            //_cityService = cityService;
         }
 
         public async Task<IdentityResult> CreateCity(string cityName)
@@ -40,8 +37,8 @@ namespace StrategyGame.Bll.Services
 
                 CityBuilding cityBuildingData1 = new CityBuilding
                 {
-                    CityId = newCity.CityId,
-                    BuildingId = 1,
+                    CityId = newCity.Id,
+                    BuildingId = (int)BuildingTypeEnum.Aramlasiranyito,
                     Number = 0,
                     RoundToFinish = 0,
                 };
@@ -49,8 +46,8 @@ namespace StrategyGame.Bll.Services
 
                 CityBuilding cityBuildingData2 = new CityBuilding
                 {
-                    CityId = newCity.CityId,
-                    BuildingId = 2,
+                    CityId = newCity.Id,
+                    BuildingId = (int)BuildingTypeEnum.Zatonyvar,
                     Number = 0,
                     RoundToFinish = 0,
                 };
@@ -60,12 +57,35 @@ namespace StrategyGame.Bll.Services
                 {
                     CityUpgrade cityUpgradeData = new CityUpgrade
                     {
-                        CityId = newCity.CityId,
+                        CityId = newCity.Id,
                         UpgradeId = i,
                         Number = 0,
                         RoundToFinish = 0,
                     };
                     _applicationDbContext.CityUpgrades.Add(cityUpgradeData);
+                }
+
+                var newArmyid = (_applicationDbContext.Armies
+                    .Select(a => a.ArmyId).DefaultIfEmpty(0).Max()) + 1;
+
+                var cityArmy = new Army
+                {
+                    CityId = newCity.Id,
+                    ArmyId = newArmyid,
+                    EnemyCityId = null,
+                };
+                _applicationDbContext.Armies.Add(cityArmy);
+                await _applicationDbContext.SaveChangesAsync();
+
+                for (var i = 1; i <= 3; i++)
+                {
+                    var Units = new ArmyUnit
+                    {
+                        UnitId = i,
+                        Number = 0,
+                        ArmyId = newArmyid,
+                    };
+                    _applicationDbContext.ArmyUnits.Add(Units);
                 }
 
                 var success = await _applicationDbContext.SaveChangesAsync() > 0;

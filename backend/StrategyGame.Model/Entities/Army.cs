@@ -1,19 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 
 namespace StrategyGame.Model.Entities
 {
-    public class Army
+    public class Army : Entity
     {
-        public int Id { get; set; }
-        public int UnitId { get; set; }
+        public int? EnemyCityId { get; set; }
+        public virtual City EnemyCity { get; set; }
 
-        public int Number { get; set; }
+        public int ArmyId { get; set; }
 
-        public int ArmyNumber { get; set; }
+        public virtual ICollection<ArmyUnit> ArmyUnits { get; set; }
 
-        public Unit Unit { get; set; }
+        public int CityId { get; set; }
+        public virtual City City { get; set; }
 
     }
+
 }

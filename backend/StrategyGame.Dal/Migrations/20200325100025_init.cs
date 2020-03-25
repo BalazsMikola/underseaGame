@@ -54,7 +54,7 @@ namespace StrategyGame.Dal.Migrations
                 name: "Buildings",
                 columns: table => new
                 {
-                    BuildingId = table.Column<int>(nullable: false)
+                    Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     Name = table.Column<string>(nullable: true),
                     Price = table.Column<int>(nullable: false),
@@ -64,14 +64,14 @@ namespace StrategyGame.Dal.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Buildings", x => x.BuildingId);
+                    table.PrimaryKey("PK_Buildings", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
                 name: "Cities",
                 columns: table => new
                 {
-                    CityId = table.Column<int>(nullable: false)
+                    Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     Name = table.Column<string>(nullable: true),
                     Population = table.Column<int>(nullable: false),
@@ -81,7 +81,7 @@ namespace StrategyGame.Dal.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Cities", x => x.CityId);
+                    table.PrimaryKey("PK_Cities", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -98,10 +98,28 @@ namespace StrategyGame.Dal.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Units",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    Name = table.Column<string>(nullable: true),
+                    Attack = table.Column<int>(nullable: false),
+                    Defend = table.Column<int>(nullable: false),
+                    Price = table.Column<int>(nullable: false),
+                    Cost = table.Column<int>(nullable: false),
+                    Food = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Units", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Upgrades",
                 columns: table => new
                 {
-                    UpgradeId = table.Column<int>(nullable: false)
+                    Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     Name = table.Column<string>(nullable: true),
                     Coral = table.Column<int>(nullable: false),
@@ -111,7 +129,7 @@ namespace StrategyGame.Dal.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Upgrades", x => x.UpgradeId);
+                    table.PrimaryKey("PK_Upgrades", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -221,6 +239,33 @@ namespace StrategyGame.Dal.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Armies",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    EnemyCityId = table.Column<int>(nullable: true),
+                    ArmyId = table.Column<int>(nullable: false),
+                    CityId = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Armies", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Armies_Cities_CityId",
+                        column: x => x.CityId,
+                        principalTable: "Cities",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Armies_Cities_EnemyCityId",
+                        column: x => x.EnemyCityId,
+                        principalTable: "Cities",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "CityBuildings",
                 columns: table => new
                 {
@@ -238,106 +283,12 @@ namespace StrategyGame.Dal.Migrations
                         name: "FK_CityBuildings_Buildings_BuildingId",
                         column: x => x.BuildingId,
                         principalTable: "Buildings",
-                        principalColumn: "BuildingId",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_CityBuildings_Cities_CityId",
                         column: x => x.CityId,
                         principalTable: "Cities",
-                        principalColumn: "CityId",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "CityUpgrade",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    CityId = table.Column<int>(nullable: false),
-                    UpgradeId = table.Column<int>(nullable: false),
-                    Number = table.Column<int>(nullable: false),
-                    RoundToFinish = table.Column<int>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_CityUpgrade", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_CityUpgrade_Cities_CityId",
-                        column: x => x.CityId,
-                        principalTable: "Cities",
-                        principalColumn: "CityId",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_CityUpgrade_Upgrades_UpgradeId",
-                        column: x => x.UpgradeId,
-                        principalTable: "Upgrades",
-                        principalColumn: "UpgradeId",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "CityArmy",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false),
-                    CityId = table.Column<int>(nullable: false),
-                    ArmyNumber = table.Column<int>(nullable: false),
-                    EnemyId = table.Column<int>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_CityArmy", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_CityArmy_Cities_CityId",
-                        column: x => x.CityId,
-                        principalTable: "Cities",
-                        principalColumn: "CityId",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Units",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    Name = table.Column<string>(nullable: true),
-                    Attack = table.Column<int>(nullable: false),
-                    Defend = table.Column<int>(nullable: false),
-                    Price = table.Column<int>(nullable: false),
-                    Cost = table.Column<int>(nullable: false),
-                    Food = table.Column<int>(nullable: false),
-                    ArmyId = table.Column<int>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Units", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Units_CityArmy_ArmyId",
-                        column: x => x.ArmyId,
-                        principalTable: "CityArmy",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Armies",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    UnitId = table.Column<int>(nullable: false),
-                    Number = table.Column<int>(nullable: false),
-                    ArmyNumber = table.Column<int>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Armies", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Armies_Units_UnitId",
-                        column: x => x.UnitId,
-                        principalTable: "Units",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -349,8 +300,9 @@ namespace StrategyGame.Dal.Migrations
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     CityId = table.Column<int>(nullable: false),
-                    UnitId = table.Column<int>(nullable: false),
-                    Number = table.Column<int>(nullable: false)
+                    UpgradeId = table.Column<int>(nullable: false),
+                    Number = table.Column<int>(nullable: false),
+                    RoundToFinish = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -359,19 +311,46 @@ namespace StrategyGame.Dal.Migrations
                         name: "FK_CityUpgrades_Cities_CityId",
                         column: x => x.CityId,
                         principalTable: "Cities",
-                        principalColumn: "CityId",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_CityUpgrades_Units_UnitId",
-                        column: x => x.UnitId,
-                        principalTable: "Units",
+                        name: "FK_CityUpgrades_Upgrades_UpgradeId",
+                        column: x => x.UpgradeId,
+                        principalTable: "Upgrades",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "ArmyUnits",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    UnitId = table.Column<int>(nullable: true),
+                    Number = table.Column<int>(nullable: false),
+                    ArmyId = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ArmyUnits", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ArmyUnits_Armies_ArmyId",
+                        column: x => x.ArmyId,
+                        principalTable: "Armies",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ArmyUnits_Units_UnitId",
+                        column: x => x.UnitId,
+                        principalTable: "Units",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
             migrationBuilder.InsertData(
                 table: "Buildings",
-                columns: new[] { "BuildingId", "Grow_coral", "Grow_pop", "Name", "Price", "Space" },
+                columns: new[] { "Id", "Grow_coral", "Grow_pop", "Name", "Price", "Space" },
                 values: new object[,]
                 {
                     { 1, 200, 50, "áramlásirányító", 1000, 0 },
@@ -380,17 +359,17 @@ namespace StrategyGame.Dal.Migrations
 
             migrationBuilder.InsertData(
                 table: "Units",
-                columns: new[] { "Id", "ArmyId", "Attack", "Cost", "Defend", "Food", "Name", "Price" },
+                columns: new[] { "Id", "Attack", "Cost", "Defend", "Food", "Name", "Price" },
                 values: new object[,]
                 {
-                    { 1, null, 6, 1, 2, 1, "rohamfóka", 50 },
-                    { 2, null, 2, 1, 6, 1, "csatacsikó", 50 },
-                    { 3, null, 5, 3, 5, 2, "lézercápa", 100 }
+                    { 1, 6, 1, 2, 1, "rohamfóka", 50 },
+                    { 2, 2, 1, 6, 1, "csatacsikó", 50 },
+                    { 3, 5, 3, 5, 2, "lézercápa", 100 }
                 });
 
             migrationBuilder.InsertData(
                 table: "Upgrades",
-                columns: new[] { "UpgradeId", "Attack", "Coral", "Defend", "Name", "Tax" },
+                columns: new[] { "Id", "Attack", "Coral", "Defend", "Name", "Tax" },
                 values: new object[,]
                 {
                     { 1, 0, 10, 0, "iszaptraktor", 0 },
@@ -402,8 +381,23 @@ namespace StrategyGame.Dal.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Armies_UnitId",
+                name: "IX_Armies_CityId",
                 table: "Armies",
+                column: "CityId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Armies_EnemyCityId",
+                table: "Armies",
+                column: "EnemyCityId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ArmyUnits_ArmyId",
+                table: "ArmyUnits",
+                column: "ArmyId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ArmyUnits_UnitId",
+                table: "ArmyUnits",
                 column: "UnitId");
 
             migrationBuilder.CreateIndex(
@@ -446,11 +440,6 @@ namespace StrategyGame.Dal.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_CityArmy_CityId",
-                table: "CityArmy",
-                column: "CityId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_CityBuildings_BuildingId",
                 table: "CityBuildings",
                 column: "BuildingId");
@@ -461,44 +450,20 @@ namespace StrategyGame.Dal.Migrations
                 column: "CityId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_CityUpgrade_CityId",
-                table: "CityUpgrade",
-                column: "CityId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_CityUpgrade_UpgradeId",
-                table: "CityUpgrade",
-                column: "UpgradeId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_CityUpgrades_CityId",
                 table: "CityUpgrades",
                 column: "CityId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_CityUpgrades_UnitId",
+                name: "IX_CityUpgrades_UpgradeId",
                 table: "CityUpgrades",
-                column: "UnitId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Units_ArmyId",
-                table: "Units",
-                column: "ArmyId");
-
-            migrationBuilder.AddForeignKey(
-                name: "FK_CityArmy_Armies_Id",
-                table: "CityArmy",
-                column: "Id",
-                principalTable: "Armies",
-                principalColumn: "Id",
-                onDelete: ReferentialAction.Cascade);
+                column: "UpgradeId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropForeignKey(
-                name: "FK_Armies_Units_UnitId",
-                table: "Armies");
+            migrationBuilder.DropTable(
+                name: "ArmyUnits");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoleClaims");
@@ -519,13 +484,16 @@ namespace StrategyGame.Dal.Migrations
                 name: "CityBuildings");
 
             migrationBuilder.DropTable(
-                name: "CityUpgrade");
-
-            migrationBuilder.DropTable(
                 name: "CityUpgrades");
 
             migrationBuilder.DropTable(
                 name: "Rounds");
+
+            migrationBuilder.DropTable(
+                name: "Armies");
+
+            migrationBuilder.DropTable(
+                name: "Units");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
@@ -540,16 +508,7 @@ namespace StrategyGame.Dal.Migrations
                 name: "Upgrades");
 
             migrationBuilder.DropTable(
-                name: "Units");
-
-            migrationBuilder.DropTable(
-                name: "CityArmy");
-
-            migrationBuilder.DropTable(
                 name: "Cities");
-
-            migrationBuilder.DropTable(
-                name: "Armies");
         }
     }
 }
