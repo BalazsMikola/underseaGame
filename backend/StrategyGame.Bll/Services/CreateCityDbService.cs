@@ -28,9 +28,9 @@ namespace StrategyGame.Bll.Services
                 City newCity = new City
                 {
                     Name = cityName,
-                    Population = 100,
-                    Pearl = 50,
-                    Coral = 20,
+                    Population = 1000,
+                    Pearl = 10000,
+                    Coral = 10000,
                     Rank = 0
                 };
                 _applicationDbContext.Cities.Add(newCity);

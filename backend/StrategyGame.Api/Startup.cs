@@ -46,6 +46,8 @@ namespace StrategyGame.Api
             services.AddScoped<IGetCityDbService, GetCityDbService>();
             services.AddScoped<ICreateArmyDbService, CreateArmyDbService>();
             services.AddScoped<IBuyUnitsDbService, BuyUnitsDbService>();
+            services.AddScoped<IBuyBuildingDbService, BuyBuildingDbService>();
+            services.AddScoped<IStartUpgradeDbService, StartUpgradeDbService>();
             services.AddDefaultIdentity<AppUser>(config =>
             {
                 config.Password.RequiredUniqueChars = 0;

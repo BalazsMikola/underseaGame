@@ -3,7 +3,7 @@ import { SharedModule } from 'src/app/shared/shared.module';
 import { BattleRoutingModule } from './battle-routing.module';
 import { BattleService } from './services/battle.service';
 import { CompComponent } from './components/comp/comp.component';
-import { ExamplePageComponent } from './pages/example/example.page.component';
+import { ExampleComponent } from './pages/example/example.component';
 
 @NgModule({
     imports: [
@@ -14,8 +14,8 @@ import { ExamplePageComponent } from './pages/example/example.page.component';
         BattleService
     ],
     declarations: [
-        CompComponent, 
-        ExamplePageComponent
+        CompComponent,
+        ExampleComponent
     ]
 })
 export class BattleModule { }

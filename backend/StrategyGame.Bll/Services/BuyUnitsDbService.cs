@@ -23,29 +23,39 @@ namespace StrategyGame.Bll.Services
 
         public async Task<IdentityResult> BuyUnits(List<int> amountOfNewUnits, int cityId)
         {
-            //check money
 
-            var army = await _applicationDbContext.Armies
-                .Where(x => x.CityId == cityId && x.EnemyCityId == null).SingleOrDefaultAsync();
+            var newMoneyService = new MoneyManagerAppService(_applicationDbContext);
+            var result = await newMoneyService.checkMoneyForNewUnits(amountOfNewUnits, cityId);
 
-            var armyRecords = _applicationDbContext.ArmyUnits.Where(x => x.ArmyId == army.ArmyId).ToList();
-
-            for (var i = 0; i < armyRecords.Count(); i++)
+            if (!result.Succeeded)
             {
-                armyRecords[i].UnitId = i+1;
-                armyRecords[i].Number = amountOfNewUnits[i];
-                armyRecords[i].ArmyId = army.ArmyId;
-                _applicationDbContext.ArmyUnits.Update(armyRecords[i]);
+                return IdentityResult.Failed(); //not enought money
+            }
+            else
+            {
+                var army = await _applicationDbContext.Armies
+                    .Where(x => x.CityId == cityId && x.EnemyCityId == null).SingleOrDefaultAsync();
+
+                var armyRecords = _applicationDbContext.ArmyUnits.Where(x => x.ArmyId == army.ArmyId).ToList();
+
+                for (var i = 0; i < armyRecords.Count(); i++)
+                {
+                    armyRecords[i].UnitId = i+1;
+                    armyRecords[i].Number += amountOfNewUnits[i];
+                    armyRecords[i].ArmyId = army.ArmyId;
+                    _applicationDbContext.ArmyUnits.Update(armyRecords[i]);
+                }
+
+                var success = await _applicationDbContext.SaveChangesAsync() > 0;
+
+                if (!success)
+                {
+                    return IdentityResult.Failed();
+                }
+
+                return IdentityResult.Success;
             }
 
-            var success = await _applicationDbContext.SaveChangesAsync() > 0;
-
-            if (!success)
-            {
-                return IdentityResult.Failed();
-            }
-
-            return IdentityResult.Success;
 
         }
 

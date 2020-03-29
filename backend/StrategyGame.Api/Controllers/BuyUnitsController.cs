@@ -36,7 +36,6 @@ namespace StrategyGame.Api.Controllers
         public async Task<IActionResult> BuyUnits([FromBody]NewUnitsModel newUnits)
         {
 
-
             string jwt = Request.Headers["Authorization"];
             string userName = JwtTokenAppService.decodeTokenForUserName(jwt);
             var userData = await userManager.FindByNameAsync(userName);

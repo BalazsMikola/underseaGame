@@ -1,0 +1,32 @@
+.container {
+  background-image: url("../../../../assets/undersea_game-01.png");
+  background-repeat: no-repeat;
+  width: 100vw;
+  height: 98vh;
+  padding: 1vh 0vw 1vh 0vw;
+}
+
+.main {
+  display: flex;
+}
+
+.header {
+  background-color: #ffffff;
+  width: 98vW;
+  height: 6vh;
+  margin: 1vh 1vw 1vh 1vw;
+}
+
+.sidebar {
+  background-color: #ffffff;
+  width: 12vW;
+  height: 88vh;
+  margin: 1vh 0vw 1vh 1vw;
+}
+
+.pages {
+  background-color: #ffffff;
+  width: 86vw;
+  height: 88vh;
+  margin: 1vh 1vw 1vh 1vw;
+}
